@@ -18,7 +18,4 @@ const formatoMoneda = (valor) => {
 	return valor.toLocaleString('es-UY', {style: 'currency', currency: 'UYU', minimumFractionDigits: 2});
 };
 
-const formatoPorcentaje = (valor) => {
-	return valor.toLocaleString('es-UY', {style: 'percent', minimumFractionDigits: 2});
-};
 
