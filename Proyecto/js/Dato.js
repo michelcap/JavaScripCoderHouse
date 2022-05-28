@@ -1,4 +1,4 @@
-
+/// se crea la clase Dato que sera la padre de los hijos egreso ingreso
 class Dato {
 	constructor(descripcion, valor) {
 		this._descripcion = descripcion;
