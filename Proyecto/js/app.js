@@ -1,16 +1,39 @@
-/// arreglos que contendran los ingreses egresos que se carguen o eliminen
-const ingresos = [new Ingreso('Salario', 3000), new Ingreso('Auto', 6000)];
-const egresos = [new Egreso('Alquiler', 3000), new Egreso('Gym', 500)];
+/// Variables Globales
+const ingresos = new Array();
+const egresos = new Array();
+
+/// recupera datos de Local Storage
+abrir = () => {
+	const auxIngresos = JSON.parse(localStorage.getItem('ingresos_JSON'));
+	const auxEgreso = JSON.parse(localStorage.getItem('egresos_JSON'));
+	if (auxIngresos != null) {
+		for (const obj of Object.values(auxIngresos))
+			ingresos.push(new Ingreso(obj._descripcion, obj._valor));
+	}
+	if (auxEgreso != null) {
+		for (const obj of Object.values(auxEgreso))
+			egresos.push(new Egreso(obj._descripcion, obj._valor));
+	}
+};
+
+/// almacena datos en Local Storage
+guardar = () => {
+	let ingresos_string = JSON.stringify(ingresos);
+	let egresos_string = JSON.stringify(egresos);
+	localStorage.setItem('ingresos_JSON', ingresos_string);
+	localStorage.setItem('egresos_JSON', egresos_string);
+};
 
 /// funcion ejecutada al cargar la pagina
-let cargarApp = () => {
+cargarApp = () => {
+	abrir();
 	cargarCabecero();
 	cargarIngresos();
 	cargarEgresos();
 };
 
 /// funcion que suma el total de los ingresos recorriendo el arreglo ingresos
-let totalIngresos = () => {
+totalIngresos = () => {
 	let totalIngreso = 0;
 	for (let ingreso of ingresos) {
 		totalIngreso += ingreso.valor;
@@ -19,7 +42,7 @@ let totalIngresos = () => {
 };
 
 /// funcion que suma el total de los ingresos recorriendo el arreglo egresos
-let totalEgresos = () => {
+totalEgresos = () => {
 	let totalEgreso = 0;
 	for (let egreso of egresos) {
 		totalEgreso += egreso.valor;
@@ -28,9 +51,9 @@ let totalEgresos = () => {
 };
 
 /// carga el html en el id correspondiente completando la seccion corespondiente
-let cargarCabecero = () => {
+cargarCabecero = () => {
 	let presupuesto = totalIngresos() - totalEgresos();
-	let porcentajeEgreso = totalEgresos() / totalIngresos();
+	let porcentajeEgreso = totalIngresos() != 0 ? totalEgresos() / totalIngresos() : 0;
 	document.getElementById('presupuesto').innerHTML = formatoMoneda(presupuesto);
 	document.getElementById('porcentaje').innerHTML = formatoPorcentaje(porcentajeEgreso);
 	document.getElementById('ingresos').innerHTML = formatoMoneda(totalIngresos());
@@ -38,17 +61,17 @@ let cargarCabecero = () => {
 };
 
 /// da formato al valor para que adopte el estilo de moneda
-const formatoMoneda = (valor) => {
-	return valor.toLocaleString('es-UY', {style: 'currency', currency: 'UYU', minimumFractionDigits: 2});
+formatoMoneda = (valor) => {
+	return valor.toLocaleString('es-UY', { style: 'currency', currency: 'UYU', minimumFractionDigits: 2 });
 };
 
 /// da formato al porcentaje que representa en egresos
-const formatoPorcentaje = (valor) => {
-	return valor.toLocaleString('es-UY', {style: 'percent', minimumFractionDigits: 2});
+formatoPorcentaje = (valor) => {
+	return valor.toLocaleString('es-UY', { style: 'percent', minimumFractionDigits: 2 });
 };
 
 /// llama uno por uno a los elementos de la lista de ingresos para cargarle el html
-const cargarIngresos = () => {
+cargarIngresos = () => {
 	let ingresosHTML = '';
 	for (let ingreso of ingresos) {
 		ingresosHTML += crearIngresosHTML(ingreso);
@@ -57,12 +80,17 @@ const cargarIngresos = () => {
 };
 
 /// carga en una variable el html necesario para completar la seccion ingresos
-const crearIngresosHTML = (ingreso) => {
+crearIngresosHTML = (ingreso) => {
 	let ingresosHTML = `
 	<div class="elemento limpiarEstilos">
 		<div class="elemento_descripcion">${ingreso.descripcion}</div>
 		<div class="derecha limpiarEstilos">
 			<div class="elemento_valor">+ ${formatoMoneda(ingreso.valor)}</div>
+			<div class="elemento_eliminar">
+				<button class="elemento_eliminar--btn">
+					<ion-icon name="close-circle-outline" onclick="eliminarIngreso(${ingreso.id})"></ion-icon>
+				</button>
+			</div>
 		</div>
 	</div>
 	`;
@@ -70,7 +98,7 @@ const crearIngresosHTML = (ingreso) => {
 };
 
 /// llama uno por uno a los elementos de la lista de egresos para cargarle el html
-const cargarEgresos = () => {
+cargarEgresos = () => {
 	let egresosHTML = '';
 	for (let egreso of egresos) {
 		egresosHTML += crearEgresosHTML(egreso);
@@ -79,7 +107,7 @@ const cargarEgresos = () => {
 };
 
 /// carga en una variable el html necesario para completar la seccion egresos
-const crearEgresosHTML = (egreso) => {
+crearEgresosHTML = (egreso) => {
 	let porcentajePorEgreso = egreso.valor / totalIngresos();
 	let egresosHTML = `
 	<div class="elemento limpiarEstilos">
@@ -87,14 +115,39 @@ const crearEgresosHTML = (egreso) => {
 		<div class="derecha limpiarEstilos">
 			<div class="elemento_valor">- ${formatoMoneda(egreso.valor)}</div>
 			<div class="elemento_porcentaje">${formatoPorcentaje(porcentajePorEgreso)}</div>
+			<div class="elemento_eliminar">
+				<button class="elemento_eliminar--btn">
+					<ion-icon name="close-circle-outline" onclick="eliminarEgreso(${egreso.id})"></ion-icon>
+				</button>
+			</div>
 		</div>
 	</div>
 	`;
 	return egresosHTML;
 };
 
+/// elimina el elemento que corresponda a ingreso clikeado
+eliminarIngreso = (id) => {
+	let idEliminar = ingresos.findIndex((ingreso) => ingreso.id === id);
+	ingresos.splice(idEliminar, 1);
+	guardar();
+	cargarCabecero();
+	cargarIngresos();
+	cargarEgresos();
+};
+
+/// elimina el elemento que corresponda a ingreso clikeado
+eliminarEgreso = (id) => {
+	let idEliminar = egresos.findIndex((egreso) => egreso.id === id);
+	egresos.splice(idEliminar, 1);
+	guardar();
+	cargarCabecero();
+	cargarIngresos();
+	cargarEgresos();
+};
+
 /// funcion que agrega elementos a los arreglos de egreso ingreso da vida al boton de check
-const agregarElemento = () => {
+agregarElemento = () => {
 	const form = document.forms['formulario'];
 	const tipo = form['tipo'];
 	const descripcion = form['descripcion'];
@@ -106,6 +159,7 @@ const agregarElemento = () => {
 		else if (tipo.value == 'egreso') {
 			egresos.push(new Egreso(descripcion.value, parseFloat(valor.value)));
 		}
+		guardar();
 	}
 	cargarCabecero();
 	cargarIngresos();

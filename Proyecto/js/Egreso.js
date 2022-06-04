@@ -1,4 +1,4 @@
-/// 
+/// clase hija de la clase Dato que suma el identificador unico id
 class Egreso extends Dato {
 	static contadorEgreso = 0;
 	constructor(descripcion, valor) {
