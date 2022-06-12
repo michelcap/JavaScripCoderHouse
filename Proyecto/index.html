@@ -7,7 +7,7 @@
 		<title>Presupuesto</title>
 		<link rel="stylesheet" href="css/index.css" />
 	</head>
-	<body onload="cargarApp()">
+	<body id = "cuerpo">
 		<div class="cabecero">
 			<div class="presupuesto">
 				<div class="presupuesto_titulo">Presuspuesto Disponible</div>
@@ -29,17 +29,17 @@
 			</div>
 		</div>
 
-		<form id="formulario" onsubmit="return false">
+		<form id="formulario">
 			<div class="agregar">
 				<div class="agregar_contenedor">
 					<select class="agregar_tipo" id="tipo">
-						<option value="ingreso" selected>+</option>
-						<option value="egreso">-</option>
+						<option value="ingreso" selected>Ingreso</option>
+						<option value="egreso">Egreso</option>
 					</select>
 					<input type="text" class="agregar_descripcion" id="descripcion" placeholder="Agregar Descripci&oacute;n" />
 					<input type="number" class="agregar_valor" id="valor" placeholder="Valor" />
-					<button class="agregar_btn">
-						<ion-icon name="checkmark-circle-outline" onclick="agregarElemento()"></ion-icon>
+					<button class="agregar_btn" id="click_btn">
+						<ion-icon name="checkmark-circle-outline"></ion-icon>
 					</button>
 				</div>
 			</div>
@@ -56,6 +56,7 @@
 			</div>
 		</div>
 
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		<script src="js/Dato.js"></script>
 		<script src="js/Egreso.js"></script>
 		<script src="js/Ingreso.js"></script>

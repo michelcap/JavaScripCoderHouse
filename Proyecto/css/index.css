@@ -117,7 +117,7 @@ body {
 }
 
 .agregar_tipo {
-    width: 55px;
+    width: auto;
     border: 1px solid #e7e7e7;
     border-radius: 5px;
     height: 44px;
