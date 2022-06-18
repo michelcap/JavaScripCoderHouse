@@ -40,9 +40,21 @@ body {
     position: absolute;
     width: 350px;
     top: 50%;
-    left: 50%;
+    left: 30%;
     transform: translate(-50%, -50%);
     color: #fff;
+}
+
+.conversor {
+    position: absolute;
+    text-align: center;
+    width: 350px;
+    height: 200px;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    border-bottom: 1px solid #e7e7e7;
 }
 
 .presupuesto_titulo{
@@ -137,13 +149,38 @@ body {
     font-family: inherit;
     font-size: 14px;
     padding: 12px 15px;
-    margin-right: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
     border-radius: 5px;
     transition: border 0.3s;
 }
 
 .agregar_descripcion { width: 400px;}
 .agregar_valor { width: 100px;}
+
+.agregar_valor_moneda {
+    border: 1px solid #e7e7e7;
+    background-color: #fff;
+    color: black;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+    border-radius: 5px;
+    transition: border 0.3s;
+}
+
+.conversor_ancho { 
+    width: 100px;
+}
+.conversor_ancho_moneda {
+    width: 120px;
+    margin: 5px;
+ }
+ .agregar_contenedor_moneda {
+    height: 150px;
+ }
 
 .agregar_btn {
     font-size: 35px;
@@ -154,7 +191,8 @@ body {
     display: inline-block;
     vertical-align: middle;
     line-height: 1.1;
-    margin-left: 10px;
+    margin-left: 7px;
+    margin-right: 7px;
 }
 
 .agregar_btn:active { transform: translateY(2px); }
