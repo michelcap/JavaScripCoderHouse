@@ -18,11 +18,8 @@ const convertirMoneda = () => {
 		let info = newsSearch(from.value, to.value, valor_from.value);
 		info
 			.then(response => {
-				let moneda = to.value;
-				console.log(moneda);
-				let retorno = response.result.USD;				
-				console.log(response);
-				document.getElementById('valor_to').innerHTML = retorno;
+				let retorno = Object.values(response.result);		
+				document.getElementById('valor_to').innerHTML = retorno[0];
 			})
 			.catch(error => {
 				swal({
