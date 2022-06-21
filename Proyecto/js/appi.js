@@ -49,8 +49,6 @@ const convertirMoneda = () => {
 			button: "Corregir",
 		});
 	}
-
-
 };
 /// escucha al boton de conversion de moneda
 let checkBTN_api = document.getElementById("click_btn_api");
